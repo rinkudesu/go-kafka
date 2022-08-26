@@ -99,7 +99,13 @@ func listenForMessages(subscriber *KafkaSubscriber) {
 		if err.(kafka.Error).Code() == kafka.ErrTimedOut {
 			log.Debug("Timed out while waiting for kafka message")
 		} else if err == nil {
-			subscriber.handler.HandleMessage(message.Value)
+			result := subscriber.handler.HandleMessage(message.Value)
+			if result {
+				_, err := subscriber.subscriber.CommitMessage(message)
+				if err != nil {
+					log.Warningf("Failed to commit message: %s", err)
+				}
+			}
 		} else {
 			log.Warningf("An error has occured while waiting for kafka message: %s", err.Error())
 		}

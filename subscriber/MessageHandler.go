@@ -1,6 +1,6 @@
 package subscriber
 
 type MessageHandler interface {
-	HandleMessage(message []byte)
+	HandleMessage(message []byte) bool
 	GetTopic() string
 }
