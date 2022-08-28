@@ -43,7 +43,7 @@ func TestKafkaProducer_Produce(t *testing.T) {
 
 func testGetProducer() (*KafkaProducer, *kafka.Consumer, uuid.UUID) {
 	ids, _ := uuid.NewUUID()
-	config := configuration.NewKafkaConfiguration("localhost:9092", "", "", ids.String(), ids.String())
+	config := configuration.NewKafkaConfiguration("127.0.0.1:9092", "", "", ids.String(), ids.String())
 	producer, _ := NewKafkaProducer(config)
 
 	consumerConfig, _ := config.GetConsumerConfig()

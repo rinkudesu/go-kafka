@@ -52,7 +52,7 @@ func (m *mockMessageHandler) GetTopic() string {
 
 func testGetSubscriber() (*KafkaSubscriber, *kafka.Producer, uuid.UUID) {
 	ids, _ := uuid.NewUUID()
-	config := configuration.NewKafkaConfiguration("localhost:9092", "", "", ids.String(), ids.String())
+	config := configuration.NewKafkaConfiguration("127.0.0.1:9092", "", "", ids.String(), ids.String())
 	subscriber, _ := NewKafkaSubscriber(config)
 
 	producerConfig, _ := config.GetProducerConfig()
