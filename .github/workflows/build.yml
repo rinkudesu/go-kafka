@@ -1,0 +1,50 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - run: go build
+  test:
+    name: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: |
+          wget -O ./kafka.docker-compose.yml https://raw.githubusercontent.com/rinkudesu/kafka-docker/main/docker-compose.yml
+          docker compose -f kafka.docker-compose.yml up -d
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - run: go test ./...
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: |
+          wget -O ./kafka.docker-compose.yml https://raw.githubusercontent.com/rinkudesu/kafka-docker/main/docker-compose.yml
+          docker compose -f kafka.docker-compose.yml up -d
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - run: go test ./... -coverprofile=coverage.out -json > test-report.out
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
