@@ -88,6 +88,9 @@ func (configuration *KafkaConfiguration) GetConsumerConfig() (*kafka.ConfigMap, 
 	if err := config.SetKey("partition.assignment.strategy", "cooperative-sticky"); err != nil {
 		return nil, err
 	}
+	if err := config.SetKey("allow.auto.create.topics", true); err != nil {
+		return nil, err
+	}
 	return config, nil
 }
 

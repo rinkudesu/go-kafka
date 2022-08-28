@@ -1,6 +1,7 @@
 package subscriber
 
 import (
+	"context"
 	"errors"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	log "github.com/sirupsen/logrus"
@@ -37,7 +38,20 @@ func NewKafkaSubscriber(configuration *configuration.KafkaConfiguration) (*Kafka
 
 func (subscriber *KafkaSubscriber) Subscribe(handler MessageHandler) error {
 	subscriber.handler = handler
-	err := subscriber.subscriber.Subscribe(handler.GetTopic(), nil)
+
+	//ensure topic exists manually due to bug: https://github.com/confluentinc/confluent-kafka-go/issues/788
+	adminClient, err := kafka.NewAdminClientFromConsumer(subscriber.subscriber)
+	if err != nil {
+		return err
+	}
+	defer adminClient.Close()
+	// ignore errors here, as fails will appear later anyway
+	_, _ = adminClient.CreateTopics(context.Background(), []kafka.TopicSpecification{{
+		Topic:         handler.GetTopic(),
+		NumPartitions: 1,
+	}})
+
+	err = subscriber.subscriber.Subscribe(handler.GetTopic(), nil)
 	if err != nil {
 		return err
 	}
