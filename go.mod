@@ -1,4 +1,4 @@
-module go-kafka
+module github.com/rinkudesu/go-kafka
 
 go 1.18
 
