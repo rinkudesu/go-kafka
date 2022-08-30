@@ -3,8 +3,8 @@ package subscriber
 import (
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/google/uuid"
+	"github.com/rinkudesu/go-kafka/configuration"
 	"github.com/stretchr/testify/assert"
-	"go-kafka/configuration"
 	"testing"
 	"time"
 )

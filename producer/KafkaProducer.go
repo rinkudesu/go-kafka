@@ -3,8 +3,8 @@ package producer
 import (
 	"encoding/json"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/rinkudesu/go-kafka/configuration"
 	log "github.com/sirupsen/logrus"
-	"go-kafka/configuration"
 	"time"
 )
 
