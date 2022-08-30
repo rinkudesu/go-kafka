@@ -1,4 +1,4 @@
-module go-kafka
+module github.com/rinkudesu/go-kafka
 
 go 1.18
 
@@ -14,4 +14,10 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+
+replace (
+	github.com/rinkudesu/go-kafka/configuration => ./configuration
+	github.com/rinkudesu/go-kafka/producer => ./producer
+	github.com/rinkudesu/go-kafka/subscriber => ./subscriber
 )
