@@ -37,6 +37,9 @@ func NewKafkaSubscriber(configuration *configuration.KafkaConfiguration) (*Kafka
 }
 
 func (subscriber *KafkaSubscriber) Subscribe(handler MessageHandler) error {
+	if subscriber.handler != nil {
+		return AlreadyHandlingErr
+	}
 	subscriber.handler = handler
 
 	//ensure topic exists manually due to bug: https://github.com/confluentinc/confluent-kafka-go/issues/788
