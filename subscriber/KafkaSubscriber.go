@@ -108,6 +108,7 @@ func (subscriber *KafkaSubscriber) Close() error {
 }
 
 func listenForMessages(subscriber *KafkaSubscriber) {
+	defer subscriber.handlerWaitGroup.Done()
 	for !(subscriber.terminate) {
 		message, err := subscriber.subscriber.ReadMessage(time.Second * 10)
 		if err == nil {
@@ -124,5 +125,4 @@ func listenForMessages(subscriber *KafkaSubscriber) {
 			log.Warningf("An error has occured while waiting for kafka message: %s", err.Error())
 		}
 	}
-	subscriber.handlerWaitGroup.Done()
 }
