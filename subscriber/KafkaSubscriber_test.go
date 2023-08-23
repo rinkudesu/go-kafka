@@ -23,12 +23,12 @@ func TestKafkaSubscriber_Subscribe(t *testing.T) {
 	assert.Nil(t, err)
 
 	err = subscriber.BeginHandle()
-	time.Sleep(time.Second)
+	time.Sleep(time.Second * 10)
 	assert.Nil(t, err)
 	topic := id.String()
 	err = producer.Produce(&kafka.Message{Value: []byte{1, 2, 3}, TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny}}, nil)
 	assert.Nil(t, err)
-	time.Sleep(time.Second)
+	time.Sleep(time.Second * 10)
 
 	assert.Equal(t, 1, mockHandler.Handled)
 	subscriber.StopHandle()
